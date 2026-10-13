@@ -4,15 +4,97 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Nox Y's HCDE 439 Physical Computing Page!</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
+    <h1>Nox Y's Assignment 1!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
+      <img src="a1-blink-operation.gif" />
       <p>Here is all the documentation for assignment 1!</p>
+    </div>
+    <div>
+      <h2>Circuit Schematic</h2>
+      <img src="a1-blink-schematic.jpeg" />
+      <p>This is the schematic I drew for this assignment. 
+        It has 3 resistors and 3 LEDs that run independently.</p>
+      <br>
+      <h2>Resistor Calculation</h2>
+      <img src="a1-blink-resistor-calculation.jpeg" />
+      <p>To calculate the value of the resistor, I used Ohm's and Kirchhoff's laws.
+        The arduino board has an output of 5V and the LEDs, although different colors, have the same voltage of 2V.
+        Once I got the resistor voltage, I filled in Ohm's law to get a resistor value of 150 ohms.
+        However, since I didn't have a 150 ohm resistor, I went higher and used a 220 ohm resistor instead.
+      </p>
+      <br>
+      <h2>Circuit Board</h2>
+      <img src="a1-blink-circuit.JPG" />
+      <p>This is the circuit board I put together. 
+        The LEDs negative ends are connected on the same node, which is then connected to the ground with a jumper wire.
+      </p>
+      <br>
+      <h2>Arduino Code</h2>
+      <div class="box">
+        <pre>
+          // the setup function runs once when you press reset or power the board
+          void setup() {
+            // initialize digital pin 12 as an output (red LED).
+            pinMode(12, OUTPUT);
+            // initialize digital pin 7 as an output (yellow LED).
+            pinMode(7, OUTPUT);
+            // initialize digital pin 2 as an output (green LED).
+            pinMode(2, OUTPUT);
+        }
+
+          // the loop function runs over and over again forever
+          void loop() {
+            //turns pin 12 (red LED) on
+            digitalWrite(12, HIGH);
+            //turns pin 7 (yellow LED) off
+            digitalWrite(7, LOW);
+            //turns pin 2 (green LED) off
+            digitalWrite(2, LOW);
+            //lets pin 12 (red LED) be on for 1 second
+            delay(1000);        
+            //turns pin 12 (red LED) off              
+            digitalWrite(12, LOW); 
+            //turns pin 7 (yellow LED) on
+            digitalWrite(7, HIGH);
+            //turns pin 2 (green LED) off
+            digitalWrite(2, LOW);
+            //lets pin 7 (yellow LED) be on for 1 second
+            delay(1000);
+            //turns pin 12 (red LED) off
+            digitalWrite(12, LOW);
+            //turns pin 7 (yellow LED) off
+            digitalWrite(7, LOW);
+            //turns pin 2 (green LED) on
+            digitalWrite(2, HIGH); 
+            //lets pin 2 (green LED) be on for 1 second
+            delay(1000);
+            }
+        </pre>
+      </div>
+      <br>
+      <h2>Circuit Operation</h2>
+      <img src="a1-blink-operation.gif" />
+      <p>As shown in the GIF above, the LEDs are blinking in 1 second intervals.
+        Starting from red to yellow to green, like a traffic light.
+      </p>
+      <br>
+      <h2>Additional Questions</h2>
+      <h3>1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h3>
+      <img src="a1-blink-voltage-graph.jpeg" />
+      <p>The different colored lines, take turns being powered by 5 volts for 1 second.</p>
+      <br>
+      <h3>2: How many LEDs could you blink independently with your Arduino? How much current would that draw?</h3>
+      <p>I blinked 3 LEDs independently with my Arduino. Since they are independent, it only draws 5 volts.</p>
+      <br>
+      <h3>3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?</h3>
+      <p>5 milliseconds. I was cutting the time between the blinking LEDS in half, starting from 1000, until I reached 25 milliseconds, which I then decided to divide by 5 to get 5 milliseconds.</p>
+      <h3>4: Did you use AI tools in completing this assignment? If yes, please provide details on how/when, as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like.</h3>
+      <p>No, I did not use any AI in this assignment.</p>
     </div>
   </body>
 </html>
