@@ -12,8 +12,10 @@
     <h1>Nox Y's Assignment 1!</h1>
     <div class="header">
       <img src="a1-blink-operation.gif" />
+      <br>
       <p>Here is all the documentation for assignment 1!</p>
     </div>
+    <br>
     <div>
       <h2>Circuit Schematic</h2>
       <img src="a1-blink-schematic.jpeg" />
@@ -21,7 +23,7 @@
         It has 3 resistors and 3 LEDs that run independently.</p>
       <br>
       <h2>Resistor Calculation</h2>
-      <img src="a1-blink-resistor-calculation.jpeg" />
+      <img src="a1-blink-resistor-calculations.jpeg" />
       <p>To calculate the value of the resistor, I used Ohm's and Kirchhoff's laws.
         The arduino board has an output of 5V and the LEDs, although different colors, have the same voltage of 2V.
         Once I got the resistor voltage, I filled in Ohm's law to get a resistor value of 150 ohms.
@@ -45,7 +47,7 @@
             pinMode(7, OUTPUT);
             // initialize digital pin 2 as an output (green LED).
             pinMode(2, OUTPUT);
-        }
+          }
 
           // the loop function runs over and over again forever
           void loop() {
@@ -73,7 +75,7 @@
             digitalWrite(2, HIGH); 
             //lets pin 2 (green LED) be on for 1 second
             delay(1000);
-            }
+          }
         </pre>
       </div>
       <br>
