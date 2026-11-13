@@ -11,75 +11,75 @@
   <body>
     <h1>Nox Yeh's Assignment 5!</h1>
     <div class="header">
-      <img src="a4-operation.gif" />
+      <img src="a5-operation.gif" />
       <p>Here is all the documentation for assignment 5!</p>
     </div>
     <br>
     <div>
-      <h2>Circuit Schematic</h2> //CHANGE IMAGE
-      <img src="a4-schematic.jpeg" />
+      <h2>Circuit Schematic</h2>
+      <img src="a5-schematic.jpeg" />
       <p>The schematic shows the use of a (self made) capacitive sensor, the use of LED strips, and a higher voltage source.</p>
       <br>
-      <h2>Resistor and Other Calculation</h2> //CHANGE
-      <img src="a4-schematic.jpeg" />
+      <h2>Resistor and Other Calculation</h2>
+      <img src="a5-calculations.jpeg" />
       <p>For the capacitive sensor, according to Arduino documentation, it is recommended to use a medium to large resistor (100k ohms to 50 mega ohms).
         Since I didn't have a resistor value that goes up to 50 mega ohms, I used my highest resistor value which is 1 mega ohm.
+        <br>
+        For the voltage calculations, I treated the MOSFET transistor as a wire (no resistance), 
+        which means the voltage drop from the power source to the LED strip has to be 12V so that from drain to source the voltage is 0.
+        For current, I calculated the current needed for 1 LED strip then multiplied it by 2 for the total current needed. 
+        This is also the total current I'm using in my circuit which is way below the max current of the transistor (47 A).
       </p>
       <br>
-      <h2>Circuit Board</h2> //CHANGE
-      <img src="a4-circuit.JPG" />
+      <h2>Circuit Board</h2>
+      <img src="a5-circuit.JPG" />
       <p>The capacitive sensor is powered by pin 12 and the sensor is pin 8, the resistor is inbetween those pins. The wire connected to the piece of metal used for the capacitive sensor is right after the sensor wire.
-        The servo motor is connected to 5V power, ground, and pin 6 (PWM).
+        The LED strips are connected to the 12V power source, the MOSFET transistor, and ground.
       </p>
       <br>
-      <h2>Arduino Code</h2> //CHANGE
+      <h2>Arduino Code</h2>
       <div class="box">
         <pre>
             // adds the capacitive sensor library functions to this sketch
-            // adds the servo motor library functions to this sketch
             #include <CapacitiveSensor.h>
-            #include <Servo.h>
 
-            // creates servo object to control servo motor
-            Servo myservo;
             // creates capacitive sensor object to use/input, the 12 is the power and the 8 is the sensor pin, the resistor is inbetween these 2 pins
             CapacitiveSensor   cs = CapacitiveSensor(12,8);
 
             // create variable for max value read through capacitive sensor (measured and estimated with the capacitive sensor example sketch and touch of 1 finger)
-            int sensMax = 2450;
+            int sensMax = 700;
             // create variable for min value read through capacitive sensor (measured and estimated with the capacitive sensor example sketch and touch of 1 finger)
-            int sensMin = 10;
-            // create variable for the position of the servo motor
-            int pos = 0;
+            int sensMin = 0;
+            // create variable for LED pin
+            int ledPin = 6;
 
             void setup() {
-                // put your setup code here, to run once:
-                // sets up serial moniter to write the sensor values
-                Serial.begin(9600);
-                //sets up servo monitor as an output
-                myservo.attach(6);
+              // put your setup code here, to run once:
+              // sets up serial moniter to write the sensor values
+              Serial.begin(9600);
+              //sets pin 6 as an output to control LED strip
+              pinMode(ledPin, OUTPUT);
             }
 
             void loop() {
-                // put your main code here, to run repeatedly:
-                // stores the average of 30 sensor samples
-                long sensorVal =  cs.capacitiveSensor(30);
-                // write to the serial monitor what value the sensor is sensing
-                Serial.println(sensorVal);
-                // maps the sensor value to a degree from 0 to 360 for the servo motor
-                pos = map(sensorVal, sensMin, sensMax, 0, 360);
-                // writes to the servo motor what position to be in
-                myservo.write(pos);
-                // wait 30 ms for servo to move
-                delay(30);
+              // put your main code here, to run repeatedly:
+              // stores the average of 30 sensor samples
+              long sensorVal =  cs.capacitiveSensor(30);
+              // write to the serial monitor what value the sensor is sensing
+              Serial.println(sensorVal);
+              // maps the sensor value to a degree from 0 to 255 for analog values
+              int ledVal = map(sensorVal, sensMin, sensMax, 0, 255);
+              // writes to the LED strip what brightness to be in
+              analogWrite(ledPin, ledVal);
+              // wait 30 ms for LED to change
+              delay(30);
             }
         </pre>
       </div>
       <br>
-      <h2>Circuit Operation</h2> //CHANGE
-      <img src="a4-operation.gif" />
-      <p>When I touch the sensor, the servo motor attempts to move 360 degrees (1 full finger touch would be 360 degrees).
-        When I let go of the sensor, the servo motor returns to its starting position.
+      <h2>Circuit Operation</h2>
+      <img src="a5-operation.gif" />
+      <p>If I'm not touching the sensor, the LED strip is dimly lit. When I touch the sensor, the LED strip brightens.
       </p>
       <br>
       <h2>Additional Questions</h2>
@@ -88,13 +88,13 @@
       <p>The absolute maximum amount of current that can run between pins 2 and 3 is 47A.
       </p>
       <br>
-      <h3>2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, and capacitors between power and ground. Find parts with datasheets you could use for each of these schematic components.</h3>
-      <img src="a4-q1.jpeg" />
-      <p>Perhaps with limiting the range of sensor values.
+      <h3>2: Draw a schematic for a circuit with using at least your arduino, a DC motor, and a flyback diode. Find parts with datasheets you could use for each of these schematic components.</h3>
+      <img src="a5-q2.jpeg" />
+      <p>Shows a schematic that uses an Arduino, a DC motor, a flyback diode, and a transistor to amplify the current needed for the DC motor.
       </p>
       <br>
       <h3>3: Here is the datasheet for the L293D chip: https://www.ti.com/product/L293D. Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move the motors both forward, both back, then one forward one back, and one back then forward.</h3>
-      <img src="a4-q1.jpeg" />
+      <img src="a5-q3.jpeg" />
       <p>Schematic uses the chip, 2 motors, and an Arduino.
         <pre>
         void loop() {
