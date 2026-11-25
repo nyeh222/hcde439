@@ -4,8 +4,8 @@ const BAUD_RATE = 9600;
 const MIN_DIAMETER = 10;
 // contrains the maximum size of the circle's diameter
 const MAX_DIAMETER = 50;
-// Declare global variables (Taken from p5 adruino ball example)
-let port, connectBtn; 
+// Declare global variables of web port and buttons (Taken & modified from p5 adruino ball example)
+let port, connectBtn, decLEDBtn, incLEDBtn;
 // declare global variable for LED brightness
 let brightness = 0;
 
@@ -16,32 +16,81 @@ function setup() {
   // windowWidth and windowHeight are p5 variables
   createCanvas(windowWidth, windowHeight);
 
-  textFont("system-ui", 24);
-  textStyle(BOLD);
-  textAlign(LEFT, TOP);
+  // create button for decreasing LED brightness
+  decLEDBtn = createButton("Decrease LED Brightness");
+  // set button position below the connect button
+  decLEDBtn.position(5, 100); 
+
+  // create button for increasing LED brightness
+  incLEDBtn = createButton("Increase LED Brightness");
+  // set button position below the decrease button
+  incLEDBtn.position(5, 150);
 }
 
 function draw() {
-  const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)
-  if (!portIsOpen) return; // If the port is not open, exit the draw loop
+  // taken from p5 adruino ball example
+  // Check whether the port is open (see checkPort function below)
+  const portIsOpen = checkPort(); 
+  // If the port is not open, exit the draw loop
+  if (!portIsOpen) return; 
 
-  let str = port.readUntil("\n"); // Read from the port until the newline
-  if (str.length == 0) return; // If we didn't read anything, return.
+  // Read from the port until the newline
+  let str = port.readUntil("\n"); 
+  // If we didn't read anything, return.
+  if (str.length == 0) return; 
 
+  // Trim whitespace and split on commas
   let arr = str.trim().split(","); // Trim whitespace and split on commas
 
-  // Convert each element to a number and map it to the desired range
+  // Convert the first array element to a number and map it to the desired range on the x axis
   let x = map(Number(arr[0]), 512, 1023, 0, windowWidth);
+  // Convert the second array element to a number and map it to the desired range on the y axis
   let y = map(Number(arr[1]), 512, 1023, 0, windowHeight);
+  // Convert the third array element to a number and map it to the diamater size
   let diameter = map(Number(arr[2]), 512, 1023, MIN_DIAMETER, MAX_DIAMETER);
-
-  // Draw with our new data
-  background("teal"); //Set the background to teal
+  // the next three lines are lines that i added
+  // Convert the fourth array element to a number and set it to the brightness variable
+  brightness = Number(arr[3]);
+  // when button is clicked, the brightness variable decreases
+  decLEDBtn.mouseClicked(onDecBtnClicked);
+  // when button is clicked, the brightness variable increases
+  incLEDBtn.mouseClicked(onIncBtnClicked);
+  
+  //Set the background to teal (taken from p5 adruino ball example)
+  background("teal");
   // Draw a circle using our readings
   circle(x, y, diameter);
 }
 
-// Three helper functions for managing the serial connection.
+// create an action for the event for when the decrease button is clicked
+function onDecBtnClicked() {
+  // if the brightness is 0 or less, return and do not decrease the brightness further
+  if (brightness <=0) return;
+
+  // decrease the brightness by 30
+  brightness = brightness - 30;
+  // constrain the brightness to ensure it doesn't go below 0 or above 255
+  brightness = constrain(brightness, 0, 255);
+
+  // Send the value as a single byte
+  port.write([brightness]);
+}
+
+// create an action for the event for when the increase button is clicked
+function onIncBtnClicked() {
+  // if the brightness is 255 or more, return and do not increase the brightness further
+  if (brightness >= 255) return;
+
+  // increase the brightness by 30
+  brightness = brightness + 30;
+  // constrain the brightness to ensure it doesn't go below 0 or above 255
+  brightness = constrain(brightness, 0, 255);
+
+  // Send the value as a single byte
+  port.write([brightness]);
+}
+
+// Three helper functions for managing the serial connection. (taken from p5 adruino ball example)
 
 function setupSerial() {
   port = createSerial();
